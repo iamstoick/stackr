@@ -1,0 +1,121 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Instrument-panel theme. The app commits to a single dark treatment: this is
+   a monitoring surface, and the amber "signal" colour is reserved exclusively
+   for thresholds so it always means the same thing.
+   --------------------------------------------------------------------------- */
+@theme {
+  --color-ink-950: #090d12;
+  --color-ink-900: #0e141c;
+  --color-ink-850: #131b25;
+  --color-ink-800: #1a2431;
+  --color-ink-700: #24313f;
+
+  --color-paper: #e8edf3;
+  --color-muted: #8496a8;
+  --color-faint: #5b6b7c;
+
+  --color-up: #35d6a4;
+  --color-down: #ff6b6b;
+  --color-signal: #ffb627;
+
+  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  --radius-panel: 0.625rem;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-paper);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* Faint horizontal rule pattern: the ledger tape this app reads from. */
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-ink-900) 55%, transparent) 0 1px,
+      transparent 1px 64px
+    );
+  }
+
+  /* Prices and tickers are always tabular so columns line up while polling. */
+  .tabular {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-signal) 35%, transparent);
+  }
+
+  /* Scrollbars, tuned to the panel rather than the OS default. */
+  * {
+    scrollbar-color: var(--color-ink-700) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+@layer components {
+  .panel {
+    background-color: var(--color-ink-900);
+    border: 1px solid var(--color-ink-800);
+    border-radius: var(--radius-panel);
+  }
+
+  .label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+    font-weight: 500;
+  }
+
+  /* Row-level flash when a polled price changes. */
+  .flash-up {
+    animation: flash-up 900ms ease-out;
+  }
+  .flash-down {
+    animation: flash-down 900ms ease-out;
+  }
+}
+
+@keyframes flash-up {
+  from {
+    background-color: color-mix(in oklab, var(--color-up) 16%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+@keyframes flash-down {
+  from {
+    background-color: color-mix(in oklab, var(--color-down) 16%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+
+# env / secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# build output
+dist/
+build/
+frontend/dist/
+
+# logs
+*.log
+npm-debug.log*
+logs/
+
+# test / coverage
+coverage/
+
+# editors + os
+.DS_Store
+.idea/
+*.swp

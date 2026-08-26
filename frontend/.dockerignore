@@ -1,0 +1,8 @@
+node_modules
+dist
+**/*.test.jsx
+src/test-setup.js
+.env
+.env.*
+npm-debug.log
+*.md
